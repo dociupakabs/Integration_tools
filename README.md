@@ -125,3 +125,7 @@ Co robimy z NIP przypadki:
 	</xsl:choose>
 </xsl:attribute>
 
+
+
+dalej wybiera zły row w mc
+usunąć '' z for-each

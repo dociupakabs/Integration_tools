@@ -59,7 +59,7 @@ export const fieldDefinitions = {
     DATA_OD: { 
       description: 'Data przyjęcia sklepu do sieci.', 
       dataType: 'DT, RRRR-MM-DD', 
-      required: true 
+      required: false 
     },
     DATA_DO: { 
       description: 'Data wyjścia sklepu z sieci', 
