@@ -129,3 +129,6 @@ Co robimy z NIP przypadki:
 
 dalej wybiera zły row w mc
 usunąć '' z for-each
+niech w for-each sprawdza id_kls jeśli wybrane lub nazwa 
+na polach jak kategoria i POWIERZCHNIA dodać if not null
+czy jak generuje mc to daje cell id number dla powierzchni w ciapkach czy bez, czy ma to znaczenie?
