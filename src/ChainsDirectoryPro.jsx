@@ -165,7 +165,7 @@ const ChainsDirectoryPro = () => {
     xmlns:expr="http://assecobs.com/extensions/expression"
     xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-    <!--Wygenerowano przez: ChainsDirectory PRO V.0.4-->
+    <!--Wygenerowano przez: ChainsDirectory PRO V.0.5-->
     <!--Źródło danych: ${fileNameDisplay}-->
     <!--Data generowania: ${timestamp}-->
 
@@ -340,7 +340,7 @@ const ChainsDirectoryPro = () => {
       <div className="max-w-7xl mx-auto p-6">
         <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
           <h1 className="text-3xl font-bold text-gray-800 mb-2 flex items-end">
-            ChainsDirectory PRO <span className="text-lg font-normal ml-2">V.0.4</span>
+            ChainsDirectory PRO <span className="text-lg font-normal ml-2">V.0.5</span>
           </h1>
           <p className="text-sm text-gray-400">
             by dociupak
