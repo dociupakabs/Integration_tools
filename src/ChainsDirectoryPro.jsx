@@ -160,7 +160,7 @@ const ChainsDirectoryPro = () => {
     <xsl:template match="/">
         <xsl:element name="meta:document">
             <xsl:element name="meta:message">
-                <xsl:for-each select="document/message/worksheet[@name='${selectedSheet}']/row[@id >= ${startRow} and string-length(cell[@id = '1']) > 0]">
+                <xsl:for-each select="document/message/worksheet[@name='${selectedSheet}']/row[@id > ${startRow} and string-length(cell[@id = '1']) > 0]">
                     <xsl:element name="meta:kls">
                         ${Object.entries(mappings)
                           .filter(([field, column]) => {
