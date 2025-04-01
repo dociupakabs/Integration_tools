@@ -143,20 +143,36 @@ const ChainsDirectoryPro = () => {
       );
   };
 
-  const generateXSLT = () => {
-    const now = new Date();
-    const timestamp = now.toISOString().replace('T', ' ').substring(0, 19);
-    
-    const fileNameDisplay = fileName || 'Nieznany plik';
-    
-    // Przygotowanie walidacji nagłówków
-    const headersValidationCode = headerRow.map((header, index) => {
-      // Dodajemy 1 do indeksu, ponieważ w XSLT komórki indeksowane są od 1
-      const cellId = index + 1;
-      return `komórka [1:${cellId}] = ${header || ''}`;
-    }).join(', ');
-    
-    const xslt = `<?xml version="1.0" encoding="UTF-8"?>
+// Funkcja do generowania XSLT
+const generateXSLT = () => {
+  const now = new Date();
+  const timestamp = now.toISOString().replace('T', ' ').substring(0, 19);
+  
+  const fileNameDisplay = fileName || 'Nieznany plik';
+  
+  // Lista pól, które powinny być dodawane tylko gdy nie są puste
+  const conditionalFields = [
+    'DATA_OD',
+    'DATA_DO',
+    'POWIERZCHNIA',
+    'LICZBA_KAS',
+    'TELEFON',
+    'EMAIL',
+    'KATEGORIA',
+    'TYP_SKLEPU',
+    'KLASYFIKACJA',
+    'REGAL_CHLODNICZY',
+    'LADA_MIESNA'
+  ];
+  
+  // Przygotowanie walidacji nagłówków
+  const headersValidationCode = headerRow.map((header, index) => {
+    // Dodajemy 1 do indeksu, ponieważ w XSLT komórki indeksowane są od 1
+    const cellId = index + 1;
+    return `komórka [1:${cellId}] = ${header || ''}`;
+  }).join(', ');
+  
+  const xslt = `<?xml version="1.0" encoding="UTF-8"?>
 
 <xsl:stylesheet version="2.0" 
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -316,6 +332,25 @@ const ChainsDirectoryPro = () => {
                                                 </xsl:otherwise>
                                             </xsl:choose>
                                         </xsl:attribute>`;
+                                            } else if (field === 'ULICA') {
+                                              // Specjalne traktowanie dla pola ULICA - domyślna wartość "BRAK"
+                                              return `
+                                        <xsl:attribute name="ULICA">
+                                            <xsl:choose>
+                                                <xsl:when test="cell[@id = '${column}'] != ''">
+                                                    <xsl:value-of select="cell[@id = '${column}']" />
+                                                </xsl:when>
+                                                <xsl:otherwise>
+                                                    <xsl:value-of select="'BRAK'" />
+                                                </xsl:otherwise>
+                                            </xsl:choose>
+                                        </xsl:attribute>`;
+                                            } else if (conditionalFields.includes(field)) {
+                                              // Pola warunkowe - dodawane tylko gdy nie są puste
+                                              return `
+                                        <xsl:if test="string-length(cell[@id = '${column}']) != 0">
+                                            <xsl:attribute name="${field}" select="cell[@id = '${column}']" />
+                                        </xsl:if>`;
                                             } else {
                                               return `
                                         <xsl:attribute name="${field}" select="cell[@id = '${column}']"/>`;
@@ -331,9 +366,9 @@ const ChainsDirectoryPro = () => {
             </xsl:choose>
         </xsl:template>
 </xsl:stylesheet>`;
-    
-    setXsltOutput(xslt);
-  };
+  
+  setXsltOutput(xslt);
+};
 
   return (
     <div className="min-h-screen bg-slate-100">
