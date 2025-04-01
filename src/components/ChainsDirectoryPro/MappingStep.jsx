@@ -20,7 +20,12 @@ const MappingStep = ({
   xsltOutput,
   checkRequiredFieldsMapped,
   generateXSLT,
-  onBack
+  onBack,
+  // Nowe parametry dla opcji walidacji
+  worksheetNameValidation,
+  setWorksheetNameValidation,
+  headersValidation,
+  setHeadersValidation
 }) => {
   return (
     <div className="bg-white rounded-xl shadow-lg p-8">
@@ -40,6 +45,41 @@ const MappingStep = ({
         </p>
       </div>
 
+      {/* Opcje walidacji */}
+      <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+        <h3 className="text-lg font-medium text-yellow-800 mb-2">Opcje walidacji:</h3>
+        <div className="flex flex-wrap gap-4">
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="worksheet-validation"
+              checked={worksheetNameValidation}
+              onChange={(e) => setWorksheetNameValidation(e.target.checked)}
+              className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+            />
+            <label htmlFor="worksheet-validation" className="text-sm text-gray-700">
+              Walidacja nazwy arkusza
+            </label>
+          </div>
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="headers-validation"
+              checked={headersValidation}
+              onChange={(e) => setHeadersValidation(e.target.checked)}
+              className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+            />
+            <label htmlFor="headers-validation" className="text-sm text-gray-700">
+              Walidacja nagłówków
+            </label>
+          </div>
+        </div>
+        <p className="text-xs text-yellow-600 mt-2">
+          Włączenie walidacji spowoduje dodanie do kodu XSLT mechanizmów sprawdzających 
+          poprawność struktury importowanego pliku.
+        </p>
+      </div>
+
       <div className="space-y-4">
         {fieldOrder.map((field) => {
           // Przekazujemy specjalne parametry dla określonych pól
@@ -54,7 +94,7 @@ const MappingStep = ({
           } else if (field === 'ID_KRAJ') {
             specialProps.defaultValue = idKrajDefaultValue;
             specialProps.setDefaultValue = setIdKrajDefaultValue;
-          } else if (field === 'NIP') {           // Dodane
+          } else if (field === 'NIP') {
             specialProps.defaultValue = nipDefaultValue;
             specialProps.setDefaultValue = setNipDefaultValue;
           }
