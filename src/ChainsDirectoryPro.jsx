@@ -22,7 +22,7 @@ const ChainsDirectoryPro = () => {
   const [idKrajDefaultValue, setIdKrajDefaultValue] = useState('PL');
   const [nipDefaultValue, setNipDefaultValue] = useState('');
   
-  // Nowe stany dla opcji walidacji
+  // Stany dla opcji walidacji
   const [worksheetNameValidation, setWorksheetNameValidation] = useState(false);
   const [headersValidation, setHeadersValidation] = useState(true);
   
@@ -414,7 +414,7 @@ const generateXSLT = () => {
             checkRequiredFieldsMapped={checkRequiredFieldsMapped}
             generateXSLT={generateXSLT}
             onBack={() => setCurrentStep(0)}
-            // Przekazanie nowych opcji walidacji
+            // Przekazanie opcji walidacji
             worksheetNameValidation={worksheetNameValidation}
             setWorksheetNameValidation={setWorksheetNameValidation}
             headersValidation={headersValidation}

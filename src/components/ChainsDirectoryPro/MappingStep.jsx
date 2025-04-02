@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import FieldMapping from './FieldMapping';
 import CopyButton from './CopyButton';
 import { fieldOrder } from './fieldsConfig';
+import { Save } from 'lucide-react';
 
 const MappingStep = ({
   mappings,
@@ -21,12 +22,65 @@ const MappingStep = ({
   checkRequiredFieldsMapped,
   generateXSLT,
   onBack,
-  // Nowe parametry dla opcji walidacji
+  // Parametry dla opcji walidacji
   worksheetNameValidation,
   setWorksheetNameValidation,
   headersValidation,
   setHeadersValidation
 }) => {
+  // Stan dla modalu z numerem zlecenia
+  const [showOrderNumberModal, setShowOrderNumberModal] = useState(false);
+  const [orderNumber, setOrderNumber] = useState('');
+  const [orderNumberError, setOrderNumberError] = useState('');
+
+  // Funkcja do otwierania modalu
+  const handleOpenSaveModal = () => {
+    setOrderNumber('');
+    setOrderNumberError('');
+    setShowOrderNumberModal(true);
+  };
+
+  // Funkcja do zamykania modalu
+  const handleCloseModal = () => {
+    setShowOrderNumberModal(false);
+  };
+
+  // Funkcja do zapisywania XSLT jako pliku XML
+  const handleSaveXSLT = () => {
+    // Sprawdzenie czy wprowadzono numer zlecenia
+    if (!orderNumber.trim()) {
+      setOrderNumberError('Proszę podać numer zlecenia');
+      return;
+    }
+
+    try {
+      // Utworzenie zawartości pliku (kod XSLT)
+      const blob = new Blob([xsltOutput], { type: 'application/xml' });
+      
+      // Utworzenie URL dla blob-a
+      const url = URL.createObjectURL(blob);
+      
+      // Utworzenie elementu do pobrania pliku
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `zlecenie_${orderNumber.trim()}.xml`;
+      
+      // Kliknięcie w element (pobranie pliku)
+      document.body.appendChild(a);
+      a.click();
+      
+      // Czyszczenie
+      URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+      
+      // Zamknięcie modalu
+      setShowOrderNumberModal(false);
+    } catch (err) {
+      console.error('Błąd podczas zapisywania pliku:', err);
+      setOrderNumberError('Wystąpił błąd podczas zapisywania pliku');
+    }
+  };
+
   return (
     <div className="bg-white rounded-xl shadow-lg p-8">
       <h2 className="text-2xl font-semibold text-gray-800 mb-6">
@@ -123,7 +177,7 @@ const MappingStep = ({
           <pre className="bg-gray-50 p-4 rounded-lg text-sm overflow-x-auto border border-gray-200 max-h-96 overflow-y-auto">
             {xsltOutput}
           </pre>
-          {xsltOutput && <CopyButton text={xsltOutput} />}
+          {xsltOutput && <CopyButton text={xsltOutput} className="absolute top-4 right-4" />}
         </div>
       </div>
 
@@ -134,15 +188,73 @@ const MappingStep = ({
         >
           Wstecz
         </button>
-        <button
-          className={`px-6 py-3 ${checkRequiredFieldsMapped() ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-300 cursor-not-allowed'} text-white rounded-lg font-medium`}
-          onClick={generateXSLT}
-          disabled={!checkRequiredFieldsMapped()}
-          title={!checkRequiredFieldsMapped() ? "Uzupełnij wszystkie wymagane pola" : ""}
-        >
-          Generuj XSLT
-        </button>
+        <div className="flex space-x-3">
+          {xsltOutput && (
+            <button
+              onClick={handleOpenSaveModal}
+              className="px-6 py-3 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 flex items-center"
+              title="Zapisz jako XML"
+            >
+              <Save className="w-5 h-5 mr-2" />
+              Zapisz XML
+            </button>
+          )}
+          <button
+            className={`px-6 py-3 ${checkRequiredFieldsMapped() ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-300 cursor-not-allowed'} text-white rounded-lg font-medium`}
+            onClick={generateXSLT}
+            disabled={!checkRequiredFieldsMapped()}
+            title={!checkRequiredFieldsMapped() ? "Uzupełnij wszystkie wymagane pola" : ""}
+          >
+            Generuj XSLT
+          </button>
+        </div>
       </div>
+
+      {/* Modal z numerem zlecenia */}
+      {showOrderNumberModal && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg p-6 max-w-md w-full">
+            <h3 className="text-xl font-semibold text-gray-800 mb-4">
+              Zapisz XSLT jako plik XML
+            </h3>
+            
+            <div className="mb-4">
+              <label htmlFor="orderNumber" className="block text-sm font-medium text-gray-700 mb-1">
+                Numer zlecenia:
+              </label>
+              <input
+                type="text"
+                id="orderNumber"
+                value={orderNumber}
+                onChange={(e) => setOrderNumber(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Wprowadź numer zlecenia"
+              />
+              {orderNumberError && (
+                <p className="text-red-500 text-sm mt-1">{orderNumberError}</p>
+              )}
+              <p className="text-xs text-gray-500 mt-1">
+                Numer zlecenia zostanie użyty jako część nazwy pliku: zlecenie_[NUMER].xml
+              </p>
+            </div>
+            
+            <div className="flex justify-end space-x-3 mt-6">
+              <button
+                onClick={handleCloseModal}
+                className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100"
+              >
+                Anuluj
+              </button>
+              <button
+                onClick={handleSaveXSLT}
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              >
+                Zapisz
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
