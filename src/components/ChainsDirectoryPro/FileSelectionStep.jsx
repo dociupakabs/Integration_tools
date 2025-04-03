@@ -78,10 +78,10 @@ const FileSelectionStep = ({
           
           <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
             <p className="text-sm font-medium text-yellow-700">
-              Wiersz <span className="font-bold">{startRow - 1}</span> będzie użyty jako wiersz z nagłówkami
+              Wiersz <span className="font-bold">{startRow}</span> będzie użyty jako wiersz z nagłówkami
             </p>
             <p className="text-sm font-medium text-yellow-700 mt-1">
-              Dane będą przetwarzane od wiersza <span className="font-bold">{startRow}</span>
+              Dane będą przetwarzane od wiersza <span className="font-bold">{startRow + 1}</span>
             </p>
           </div>
           
