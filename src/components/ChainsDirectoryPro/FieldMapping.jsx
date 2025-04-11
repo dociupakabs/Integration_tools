@@ -75,6 +75,9 @@ function FieldMapping({
         </div>
       );
     } else if (fieldInfo.special === 'defaultValue') {
+      // Dostosuj szerokość pola input w zależności od długości jego zawartości
+      const inputWidth = defaultValue ? Math.max(defaultValue.length * 10, 48) : 48;
+      
       return (
         <div className="flex items-center mt-2 ml-8">
           <label className="text-sm text-gray-600 mr-2">
@@ -84,7 +87,8 @@ function FieldMapping({
             type="text"
             value={defaultValue}
             onChange={(e) => setDefaultValue(e.target.value)}
-            className="px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 w-16"
+            className="px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+            style={{ width: `${inputWidth}px`, minWidth: '48px' }}
           />
         </div>
       );

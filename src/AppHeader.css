@@ -1,0 +1,42 @@
+.dropdown-menu {
+    animation: fadeIn 0.2s ease-out;
+    transform-origin: top center;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .menu-header {
+    color: #718096;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .menu-item {
+    transition: all 0.2s;
+    position: relative;
+  }
+  
+  .menu-item:hover {
+    background-color: #EBF5FF;
+    color: #2B6CB0;
+  }
+  
+  .menu-item:hover::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background-color: #3182CE;
+  }

@@ -13,6 +13,13 @@ const FileSelectionStep = ({
   loadSheetData, 
   onNext 
 }) => {
+  // Dynamiczna szerokość pola numerycznego
+  const getNumberInputWidth = (value) => {
+    const valueStr = value.toString();
+    const width = Math.max(valueStr.length * 10, 48);
+    return `${width}px`;
+  };
+
   return (
     <div className="bg-white rounded-xl shadow-lg p-8">
       <h2 className="text-2xl font-semibold text-gray-800 mb-6">Wybór pliku</h2>
@@ -60,7 +67,8 @@ const FileSelectionStep = ({
                 min="1"
                 value={startRow - 1}
                 onChange={(e) => handleStartRowChange(parseInt(e.target.value) + 1)}
-                className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-32"
+                className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                style={{ width: getNumberInputWidth(startRow - 1) }}
               />
               <span className="text-sm text-gray-500">
                 (Pierwszy wiersz = 1)
@@ -78,10 +86,10 @@ const FileSelectionStep = ({
           
           <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
             <p className="text-sm font-medium text-yellow-700">
-              Wiersz <span className="font-bold">{startRow}</span> będzie użyty jako wiersz z nagłówkami
+              Wiersz <span className="font-bold">{startRow - 1}</span> będzie użyty jako wiersz z nagłówkami
             </p>
             <p className="text-sm font-medium text-yellow-700 mt-1">
-              Dane będą przetwarzane od wiersza <span className="font-bold">{startRow + 1}</span>
+              Dane będą przetwarzane od wiersza <span className="font-bold">{startRow}</span>
             </p>
           </div>
           

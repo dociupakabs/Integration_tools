@@ -24,6 +24,17 @@ const LoginForm = ({ onLogin }) => {
     }, 500);
   };
 
+  // Dynamiczna szerokość pól
+  const getUsernameWidth = () => {
+    const minWidth = '100%'; // Zachowamy pełną szerokość dla formularza logowania
+    return minWidth;
+  };
+
+  const getPasswordWidth = () => {
+    const minWidth = '100%'; // Zachowamy pełną szerokość dla formularza logowania
+    return minWidth;
+  };
+
   return (
     <div className="min-h-[400px] flex items-center justify-center p-6">
       <div className="w-full max-w-md p-8 bg-white rounded-xl shadow-lg">
@@ -48,6 +59,7 @@ const LoginForm = ({ onLogin }) => {
               onChange={(e) => setUsername(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               placeholder="Wprowadź login"
+              style={{ width: getUsernameWidth() }}
               required
             />
           </div>
@@ -63,6 +75,7 @@ const LoginForm = ({ onLogin }) => {
               onChange={(e) => setPassword(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               placeholder="Wprowadź hasło"
+              style={{ width: getPasswordWidth() }}
               required
             />
           </div>
